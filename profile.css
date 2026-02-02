@@ -1,0 +1,188 @@
+body {
+    font-family: Arial, sans-serif; /* Chọn phông chữ là Arial, nếu không có thì dùng sans-serif */
+    margin: 0;      /* Xóa khoảng cách lề ngoài mặc định của trình duyệt */
+    padding: 0;     /* Xóa khoảng cách lề trong mặc định */
+    background-color: #f4f4f4; /* Đặt màu nền xám nhạt cho toàn bộ trang web để đỡ chói mắt */
+}
+
+a {
+    text-decoration: none; /* Bỏ dấu gạch chân mặc định dưới các đường link */
+    color: #333;           /* Đặt màu chữ link là màu đen xám (thay vì màu xanh mặc định) */
+}
+
+/* --- PHẦN ĐẦU TRANG (HEADER) --- */
+header {
+    background-color: #fff; /* Nền màu trắng */
+    padding: 10px 0;        /* Cách trên dưới 10px, trái phải 0 */
+    border-bottom: 3px solid #0056b3; /* Kẻ một đường viền màu xanh đậm dày 3px ở dưới đáy header */
+}
+
+.banner {
+    width: 80%;           /* Chiều rộng của banner chỉ chiếm 80% màn hình */
+    margin: 0 auto;       /* Canh giữa khối banner ra giữa màn hình */
+    display: flex;        /* Sử dụng Flexbox để xếp Logo và Tên trường nằm ngang hàng nhau */
+    align-items: center;  /* Canh giữa Logo và Tên trường theo chiều dọc (trục y) */
+}
+
+.logo {
+    width: 80px;          /* Chiều rộng logo */
+    height: 80px;         /* Chiều cao logo */
+    background-color: #ddd; /* Màu nền xám (giả lập khi chưa có ảnh) */
+    border-radius: 50%;   /* Bo tròn 4 góc 50% để tạo thành hình tròn */
+    margin-right: 20px;   /* Tạo khoảng cách 20px bên phải logo để tách khỏi tên trường */
+}
+
+.school-name h1 {
+    margin: 0;            /* Xóa khoảng cách thừa xung quanh thẻ h1 */
+    color: #d0021b;       /* Màu đỏ đậm cho tên trường */
+    font-size: 24px;      /* Cỡ chữ to 24px */
+    text-transform: uppercase; /* Tự động viết hoa toàn bộ chữ cái */
+}
+
+.school-name p {
+    margin: 5px 0 0;      /* Cách bên trên 5px */
+    color: #0056b3;       /* Màu xanh dương đậm */
+    font-weight: bold;    /* Chữ in đậm */
+}
+
+/* --- THANH MENU (NAV) --- */
+nav {
+    background-color: #0056b3; /* Nền màu xanh dương đậm cho thanh menu */
+}
+
+nav ul {
+    list-style: none; /* Bỏ các dấu chấm tròn đầu dòng của danh sách (ul li) */
+    margin: 0;
+    padding: 0;
+    width: 80%;       /* Độ rộng menu bằng với banner (80%) */
+    margin: 0 auto;   /* Canh giữa menu */
+    display: flex;    /* Quan trọng: Xếp các mục menu (li) thành hàng ngang */
+}
+
+nav ul li {
+    position: relative; /* Để phục vụ việc canh chỉnh các thành phần con sau này nếu có */
+}
+
+nav ul li a {
+    display: block;      /* Biến thẻ a thành dạng khối để click được vào vùng rộng hơn */
+    padding: 15px 20px;  /* Khoảng cách bên trong: trên dưới 15px, trái phải 20px */
+    color: white;        /* Chữ màu trắng */
+    font-weight: bold;   /* Chữ đậm */
+}
+
+/* Hiệu ứng khi di chuột vào menu */
+nav ul li a:hover {
+    background-color: #004494; /* Đổi màu nền tối hơn một chút khi di chuột vào */
+}
+
+/* --- BỐ CỤC CHÍNH (LAYOUT 2 CỘT) --- */
+.container {
+    width: 80%;       /* Độ rộng vùng nội dung là 80% */
+    margin: 20px auto;/* Cách trên dưới 20px, canh giữa trái phải */
+    display: flex;    /* Kích hoạt Flexbox để chia cột */
+    gap: 20px;        /* Tạo khoảng cách 20px giữa cột chính và cột phụ (sidebar) */
+}
+
+/* --- CỘT NỘI DUNG CHÍNH (BÊN TRÁI) --- */
+.main-content {
+    flex: 3;          /* Chiếm 3 phần không gian (tương đương 75%) */
+    background: white;/* Nền trắng */
+    padding: 20px;    /* Khoảng đệm bên trong */
+    border-radius: 5px; /* Bo nhẹ 4 góc */
+}
+
+.section-title {
+    border-bottom: 2px solid #d0021b; /* Kẻ đường gạch chân màu đỏ */
+    color: #d0021b;       /* Chữ màu đỏ */
+    font-size: 18px;
+    font-weight: bold;
+    padding-bottom: 10px; /* Khoảng cách từ chữ xuống đường gạch chân */
+    margin-bottom: 20px;  /* Khoảng cách từ đường gạch chân xuống nội dung dưới */
+    text-transform: uppercase; /* Viết hoa tiêu đề */
+}
+
+.news-item {
+    display: flex;        /* Xếp ảnh và nội dung tin tức nằm ngang hàng */
+    margin-bottom: 20px;  /* Khoảng cách giữa các tin */
+    border-bottom: 1px solid #eee; /* Đường kẻ mờ ngăn cách giữa các tin */
+    padding-bottom: 20px;
+}
+
+.news-thumb {
+    width: 150px;         /* Cố định chiều rộng ảnh */
+    height: 100px;        /* Cố định chiều cao ảnh */
+    background-color: #ccc;
+    margin-right: 15px;   /* Cách phần chữ bên phải 15px */
+    object-fit: cover;    /* Giúp ảnh không bị méo khi bị ép kích thước */
+}
+
+.news-desc h3 {
+    margin: 0 0 5px;      /* Xóa margin trên, margin dưới 5px */
+    font-size: 16px;
+}
+
+.news-desc h3 a {
+    color: #0056b3;       /* Màu tiêu đề tin */
+}
+
+.news-desc h3 a:hover {
+    color: #d0021b;       /* Đổi màu đỏ khi di chuột vào tiêu đề */
+}
+
+.date {
+    font-size: 12px;      /* Chữ ngày tháng nhỏ lại */
+    color: #777;          /* Màu xám nhạt */
+    margin-bottom: 5px;
+}
+
+/* --- CỘT BÊN PHẢI (SIDEBAR) --- */
+.sidebar {
+    flex: 1; /* Chiếm 1 phần không gian (tương đương 25%) - Nhỏ hơn cột chính */
+}
+
+.widget {
+    background: white;
+    padding: 15px;
+    margin-bottom: 20px;  /* Khoảng cách giữa các widget */
+    border-radius: 5px;
+    border: 1px solid #ddd; /* Viền mỏng màu xám bao quanh widget */
+}
+
+.widget-title {
+    background-color: #0056b3; /* Nền tiêu đề widget màu xanh */
+    color: white;              /* Chữ trắng */
+    padding: 10px;
+    font-weight: bold;
+    text-align: center;        /* Canh giữa chữ */
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.widget ul {
+    list-style: none; /* Bỏ dấu chấm đầu dòng */
+    padding: 0;
+}
+
+.widget ul li {
+    padding: 8px 0;   /* Cách trên dưới 8px */
+    border-bottom: 1px dashed #ccc; /* Đường kẻ đứt nét ngăn cách các mục */
+}
+
+.gallery-placeholder img {
+    width: 100%;      /* Ảnh sẽ co giãn đầy khung widget */
+    height: 80px;
+    background-color: #eee;
+    margin-bottom: 5px;
+}
+
+/* --- CHÂN TRANG (FOOTER) --- */
+footer {
+    background-color: #333; /* Nền màu tối */
+    color: white;           /* Chữ màu trắng */
+    text-align: center;     /* Canh giữa nội dung */
+    padding: 20px 0;
+    margin-top: 20px;       /* Cách phần nội dung bên trên 20px */
+    font-size: 14px;
+}
