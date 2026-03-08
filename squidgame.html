@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cyber Jump: Neon Evolution</title>
+    <style>
+        body {
+            margin: 0; overflow: hidden; background: #050505;
+            font-family: 'Orbitron', sans-serif; touch-action: manipulation;
+        }
+        canvas { display: block; }
+        
+        /* Menu chính */
+        #main-menu {
+            position: absolute; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: rgba(0, 0, 0, 0.85); z-index: 10;
+        }
+
+        .game-title {
+            font-size: 60px; color: #0ff; text-transform: uppercase;
+            text-shadow: 0 0 20px #0ff, 0 0 40px #0ff;
+            margin-bottom: 20px; animation: blink 1.5s infinite;
+        }
+
+        .btn-start {
+            padding: 15px 40px; font-size: 24px; background: transparent;
+            color: #f0f; border: 2px solid #f0f; cursor: pointer;
+            box-shadow: 0 0 10px #f0f; transition: 0.3s;
+        }
+
+        .btn-start:hover { background: #f0f; color: #000; box-shadow: 0 0 30px #f0f; }
+
+        #score-ui {
+            position: absolute; top: 20px; left: 20px; color: #fff;
+            font-size: 24px; text-shadow: 0 0 5px #0ff; z-index: 5;
+            display: none;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="score-ui">CORE: 0</div>
+
+    <div id="main-menu">
+        <h1 class="game-title">NEON JUMP</h1>
+        <button class="btn-start" onclick="startGame()">INITIALIZE</button>
+        <p style="color: #666; margin-top: 20px;">TAP or SPACE to FLY</p>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const mainMenu = document.getElementById("main-menu");
+        const scoreUI = document.getElementById("score-ui");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let gameActive = false;
+        let score = 0;
+        let bird = { x: 80, y: canvas.height/2, w: 40, h: 30, v: 0, gravity: 0.25, jump: -6 };
+        let pipes = [];
+        let stars = [];
+
+        // Tạo hiệu ứng nền sao
+        for(let i=0; i<100; i++) {
+            stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*2 });
+        }
+
+        function drawBird() {
+            ctx.save();
+            ctx.translate(bird.x + bird.w/2, bird.y + bird.h/2);
+            ctx.rotate(bird.v * 0.05); // Xoay phi thuyền theo vận tốc rơi
+            
+            // Thân phi thuyền (Thumbnail phong cách Neon)
+            ctx.shadowBlur = 15; ctx.shadowColor = "#0ff";
+            ctx.fillStyle = "#0ff";
+            ctx.beginPath();
+            ctx.moveTo(20, 0); ctx.lineTo(-15, -15); ctx.lineTo(-10, 0); ctx.lineTo(-15, 15);
+            ctx.closePath(); ctx.fill();
+            
+            // Đuôi lửa
+            if(gameActive) {
+                ctx.fillStyle = "#f0f";
+                ctx.fillRect(-20, -5, Math.random()*10, 10);
+            }
+            ctx.restore();
+        }
+
+        function drawPipes() {
+            pipes.forEach(p => {
+                ctx.shadowBlur = 10; ctx.shadowColor = "#f0f";
+                ctx.fillStyle = "rgba(255, 0, 255, 0.2)";
+                ctx.strokeStyle = "#f0f";
+                ctx.lineWidth = 3;
+
+                // Cột trên
+                ctx.fillRect(p.x, 0, 60, p.top);
+                ctx.strokeRect(p.x, 0, 60, p.top);
+
+                // Cột dưới
+                ctx.fillRect(p.x, p.top + 180, 60, canvas.height);
+                ctx.strokeRect(p.x, p.top + 180, 60, canvas.height);
+                
+                // Vẽ các đường vân trên cột
+                ctx.beginPath();
+                ctx.moveTo(p.x, p.top - 10); ctx.lineTo(p.x + 60, p.top - 10);
+                ctx.moveTo(p.x, p.top + 190); ctx.lineTo(p.x + 60, p.top + 190);
+                ctx.stroke();
+            });
+        }
+
+        function update() {
+            if(!gameActive) return;
+
+            bird.v += bird.gravity;
+            bird.y += bird.v;
+
+            if(pipes.length === 0 || pipes[pipes.length-1].x < canvas.width - 300) {
+                pipes.push({ x: canvas.width, top: Math.random()*(canvas.height-300)+50, passed: false });
+            }
+
+            pipes.forEach((p, i) => {
+                p.x -= 4;
+                if(bird.x + 25 > p.x && bird.x < p.x + 60) {
+                    if(bird.y < p.top || bird.y + 25 > p.top + 180) gameOver();
+                }
+                if(!p.passed && p.x < bird.x) {
+                    p.passed = true; score++;
+                    scoreUI.innerText = "CORE: " + score;
+                }
+                if(p.x < -60) pipes.splice(i, 1);
+            });
+
+            if(bird.y > canvas.height || bird.y < 0) gameOver();
+        }
+
+        function draw() {
+            ctx.fillStyle = "#050505";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Vẽ sao nền
+            ctx.fillStyle = "#fff";
+            stars.forEach(s => {
+                ctx.fillRect(s.x, s.y, s.s, s.s);
+                if(gameActive) s.x -= 0.5;
+                if(s.x < 0) s.x = canvas.width;
+            });
+
+            drawPipes();
+            drawBird();
+            update();
+            requestAnimationFrame(draw);
+        }
+
+        function startGame() {
+            gameActive = true;
+            score = 0;
+            bird.y = canvas.height/2;
+            bird.v = 0;
+            pipes = [];
+            mainMenu.style.display = "none";
+            scoreUI.style.display = "block";
+            scoreUI.innerText = "CORE: 0";
+        }
+
+        function gameOver() {
+            gameActive = false;
+            mainMenu.style.display = "flex";
+            document.querySelector('.game-title').innerText = "SYSTEM FAILURE";
+            document.querySelector('.btn-start').innerText = "REBOOT";
+        }
+
+        window.addEventListener("mousedown", () => { if(gameActive) bird.v = bird.jump; });
+        window.addEventListener("touchstart", (e) => { e.preventDefault(); if(gameActive) bird.v = bird.jump; });
+        
+        draw();
+    </script>
+</body>
+</html>
